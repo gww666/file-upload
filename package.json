@@ -1,0 +1,17 @@
+{
+  "name": "file-upload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "formidable": "^1.2.1",
+    "koa": "^2.7.0",
+    "koa-router": "^7.4.0",
+    "unzip": "^0.1.11"
+  }
+}
