@@ -30,6 +30,15 @@ const stream2Buffer = stream => {
     });
 }
 
+router.options("/upload", ctx => {
+    let origin = ctx.req.headers.origin;
+    ctx.set("Access-Control-Allow-Origin", origin);
+    ctx.set("Access-Control-Allow-Headers", "X-Requested-With,X-PINGOTHER,Content-Type,sessionid");
+    ctx.set("Access-Control-Allow-Methods", "OPTIONS");
+    ctx.set("Access-Control-Allow-Credentials", "true");
+    ctx.body = "";
+});
+
 router.post("/upload", ctx => {
     ctx.respond = false;
 
@@ -74,16 +83,27 @@ router.post("/upload", ctx => {
     }).on("end", () => {
         //如果是图片，就不做后续解压缩处理
         if (config.type === "image") {
+            // ctx.res.statusCode = 200;
+            //获取请求源
+            let origin = ctx.req.headers.origin;
+            // console.log("headers", ctx.req.headers);
+            // ctx.res.setHeader("Access-Control-Allow-Origin", origin);
+            // ctx.res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,X-PINGOTHER,Content-Type,sessionid");
+            // ctx.res.setHeader("Access-Control-Allow-Methods", "OPTIONS,PUT,POST,GET,DELETE");
+            // ctx.res.setHeader("Access-Control-Allow-Methods", "OPTIONS");
+            // ctx.res.setHeader("Content-Type", "application/json;charset=utf8;");
             ctx.res.writeHead(200, {
-                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": origin,
                 "Access-Control-Allow-Headers": "X-Requested-With,X-PINGOTHER,Content-Type,sessionid",
                 "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
-                "content-type": "application/json;charset=utf8;"
+                "Access-Control-Allow-Credentials": "true",
+                "Content-Type": "application/json;charset=utf8;"
             });
             ctx.res.end(JSON.stringify({
                 returnCode: 1,
                 message: "上传成功",
-                data: [`/public/upload/${config.md5}.${ext}`]
+                // data: [`/public/upload/${config.md5}.${ext}`]
+                data: [`${config.md5}.${ext}`]
             }));
             return;
         };
